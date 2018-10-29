@@ -45,7 +45,8 @@ if ischar(gL) % check if is a file name or gifti object
 elseif isa(gL, 'gifti')
     gL = gifti(gL);
     gR = gifti(gR);
-elseif isa(gL, 'double')
+elseif isa(gL,'float')
+    % do nothing if it is already a vector
 else
     print('wrong object class for input gifti')
 end
