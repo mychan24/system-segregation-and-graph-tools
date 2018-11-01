@@ -49,8 +49,8 @@ segregation <- function(M=NULL, Ci=NULL, diagzero=TRUE, negzero=TRUE) {
   for(i in 1:length(Ci_order)){ # loop through communities
     network <- Ci_order[i]
     
-    ww = M[sys==network,Ci==network]		# find index for within communitiy edges
-    bb = M[sys==network,which(Ci!=network)]	# find index for within communitiy edges
+    ww = M[Ci==network,Ci==network]		# find index for within communitiy edges
+    bb = M[Ci==network,which(Ci!=network)]	# find index for within communitiy edges
     
     within <- append(within, ww[upper.tri(ww)])
     between <- append(between, as.vector(bb))  

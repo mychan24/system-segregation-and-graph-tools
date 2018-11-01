@@ -84,7 +84,7 @@ segregation_by_type <- function(M=NULL, Ci=NULL, C_Type=NULL, diagzero=TRUE, neg
         b.index <- intersect(type_i, as.vector(which(Ci!=Ci_specific[j]))) # find index of other communities within current system-type
 		
         w.mat <- M[w.index, w.index]
-        Ci_result$W_same[j] <- mean(w.mat[upper.tri(mat[w.index, w.index],diag=FALSE)],na.rm=TRUE) # average within-community 
+        Ci_result$W_same[j] <- mean(w.mat[upper.tri(M[w.index, w.index],diag=FALSE)],na.rm=TRUE) # average within-community 
         Ci_result$B_all[j] <- mean(M[w.index, c(b.index, othertype_i)], na.rm=TRUE) # average between-community with other communities (same or diff type)        
         Ci_result$B_same[j] <- mean(M[w.index, b.index],na.rm=TRUE)  # average between-community with same-type of communities 		
         Ci_result$B_other[j] <- mean(M[w.index, othertype_i],na.rm=TRUE) # average between-community with other-type of communities        
