@@ -28,42 +28,46 @@ function [z, r, tp] = fsLR2roizmat(gL, gR, roiL, roiR)
 %   myc 10/2016 - original
 %   myc 10/2018 - commented script
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
-if ischar(roiL) % check if roi is a file name or gifti object
-    roiL = gifti(roiL); % load gifti if it is a file name
-    roiR = gifti(roiR);
-end
-
-roiL = roiL.cdata;
-roiR = roiR.cdata;
-
-%Left
+% % Load data GIFTIs
 if ischar(gL) % check if is a file name or gifti object
+    disp('Input is a filepath')
     gL = gifti(gL);
     gL = gL.cdata;
     gR = gifti(gR);
     gR = gR.cdata;
 elseif isa(gL, 'gifti')
-    gL = gifti(gL);
-    gR = gifti(gR);
+    disp('Input is a gifti object')
+    gL = gL.cdata; 
+    gR = gR.cdata;
 elseif isa(gL,'float')
+    disp('Input is a numerical matrix')
     % do nothing if it is already a vector
 else
     print('wrong object class for input gifti')
 end
 
-glm = zeros(size(roiL,2),size(gL,2)); % Left
-for j = 1:size(roiL,2) % loop ROIs
-    glm(j,:) = mean(gL(roiL(:,j)==1, :));
+% % Load ROIs
+if ischar(roiL) % check if roi is a file name or gifti object
+    roiL = gifti(roiL); % load gifti if it is a file name
+    roiR = gifti(roiR);
 end
-  
-grm = zeros(size(roiR,2),size(gR,2)); % Right
-for k = 1:size(roiR,2)
-    grm(k,:) = mean(gR(roiR(:,k)==1, :));
+roiL = roiL.cdata;
+roiR = roiR.cdata;
+
+glm = zeros(size(roiL,2),size(gL,2)); %Left
+for j = 1:size(roiL,2) % loop ROIs
+    glm(j,:) = mean(gL(roiL(:,j)~=0, :));
 end
 
-tp = [glm;grm]; % Stack left and right to make roi x tp matrix
-r = corrcoef(tp'); % Calculate correlation matrix
+grm = zeros(size(roiR,2),size(gR,2)); %Right   
+for k = 1:size(roiR,2)
+    grm(k,:) = mean(gR(roiR(:,k)~=0, :));
+end
+
+tp = [glm;grm]; % Combine left and right
+r = corrcoef(tp'); % Correlation matrix
 z = 0.5 * log((1+r)./(1-r)); % Fisher-z transform
     
 end
+
 
