@@ -27,6 +27,7 @@ function [z, r, tp] = fsLR2roizmat(gL, gR, roiL, roiR)
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 %   myc 10/2016 - original
 %   myc 10/2018 - commented script
+%   myc 11/2018 - change roi flag from ==1 to ~=0
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 % % Load data GIFTIs
 if ischar(gL) % check if is a file name or gifti object
