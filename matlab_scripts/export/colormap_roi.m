@@ -3,8 +3,10 @@ function [fig] = colormap_roi(mat, sorting, label, varargin)
 %   Save matrix sorted by network label. 
 % USAGE
 % colormap_roi(sorted_matrix, 2, roifile);
-% colormap_roi(sorted_matrix, 2, roifile, -.075, .075,'cool',1,'fig title','graph.png')
-% colormap_roi(un_sorted_matrix, 1, roifile, '','','bone',0,'','')
+%   with otpions:
+% colormap_roi(sorted_matrix, 2, roifile, -.075, .075,'cool','fig title',1,'graph.png')
+%   skipping options (use []): 
+% colormap_roi(un_sorted_matrix, 1, roifile, [],[],'bone',[],[],[])
 
 % Inputs:   mat,            matrix to be saved as figure (e.g., 441x441 mat)
 %           sorting,        1 = sort matrix so nodes with same label are 
@@ -15,8 +17,8 @@ function [fig] = colormap_roi(mat, sorting, label, varargin)
 %           minr,           minimum on graph
 %           maxr,           maximum on graph
 %           colormapcol,    color pallete for the colormap (default='jet')
-%           savefig,        save an output figure or not (1 = yes)
 %           titletext,      title for the figure
+%           savefig,        save an output figure or not (1 = yes)
 %           outfile,        output file 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 %   myc 12/2018 - initial
@@ -25,8 +27,8 @@ if ~isempty(varargin)
     minr=varargin{1,1};
     maxr=varargin{1,2};
     colormapcol=varargin{1,3};
-    savefig=varargin{1,4};
-    titletext=varargin{1,5};
+    titletext=varargin{1,4};
+    savefig=varargin{1,5};
     outfile=varargin{1,6};
 else
     minr=0;
@@ -101,7 +103,7 @@ set(gca,'YTick',ticklocation);  % Y-Ticks
 set(gca,'YtickLabel',[]);
 t1 = text(zeros(length(ticklocation),1), ticklocation, num2str(u),'HorizontalAlignment','right','VerticalAlignment','middle','FontSize',12);
 for j = 1:length(u)
-    set(t1(j));
+    set(t1(j),'Color', [0 0 0]);
 end
 
 
@@ -109,7 +111,7 @@ set(gca,'XTick',ticklocation); % X-Ticks
 set(gca,'XtickLabel',[]);
 t2 = text(ticklocation, repmat(size(mat,1),length(ticklocation),1),num2str(u),'VerticalAlignment','top','FontSize',12);
 for k = 1:length(u)
-    set(t2(k));
+    set(t2(k), 'Color', [0 0 0]);
 end
 
 colorbar
