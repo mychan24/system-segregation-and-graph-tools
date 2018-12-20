@@ -1,4 +1,4 @@
-function [fig] = colormap_roi(mat, sorting, label, labelmeta, varargin)
+function [fig] = colormap_roi(mat, sorting, label, varargin)
 % DESCRIPTION:
 %   Save matrix sorted by network label. 
 % USAGE
@@ -11,10 +11,6 @@ function [fig] = colormap_roi(mat, sorting, label, labelmeta, varargin)
 %                           grouped together; 2 = no sorting
 %           label,          vector of community label (matchs mat
 %                           dimension; 441x1)
-%           labelmeta,      3 column cell array
-%                               - label number        
-%                               - label text  
-%                               - [R G B]
 % OPTIONAL: 
 %           minr,           minimum on graph
 %           maxr,           maximum on graph
@@ -22,33 +18,6 @@ function [fig] = colormap_roi(mat, sorting, label, labelmeta, varargin)
 %           savefig,        save an output figure or not (1 = yes)
 %           titletext,      title for the figure
 %           outfile,        output file 
-% Outputs:  
-%
-% ==== SAMPLE networklabel ====
-%     labelmeta = {2, '2 Ventral Frontal Temporal', [.502 .502 .502];
-%                 3, '3 Default', [1 0 0];
-%                 4, '4 Hand Somatosensory-motor', [0 1 1];
-%                 5, '5 Visual', [0 0 1];
-%                 6, '6 Fronto-Parietal Task Control', [.961 .961 .059];
-%                 7, '7 Ventral Attention', [0 .502 .502];
-%                 8, '8 Caudate-Putamen', [0 .275 .157];
-%                 9, '9 Superior Temporal Gyrus', [1 .722 .824];
-%                 10, '10 Inferior Temporal Pole', [.675 .675 .675];
-%                 11, '11 OFC', [.373 .373 .373];
-%                 12, '12 Inferior Anterior Insula', [.824 .824 .824];
-%                 13, '13 Frontal Pole', [.627 .627 .627];
-%                 14, '14 Cingulo-Opercular Task Control', [.502 0 .502];
-%                 15, '15 Dorsal Attention', [0 .863 0];
-%                 16, '16 Mouth Somatosensory-motor', [1 .502 0];
-%                 17, '17 Lateral Temporal Pole', [.863 .863 .863];
-%                 19, '19 Lateral Occipito-temporal', [.353 .353 .353];
-%                 20, '20 Salience', [0 0 0];
-%                 21, '21 Unkown Medial-temporal-parietal', [1 .973 .706];
-%                 22, '22 Unkown Memory Retrieval', [0 .424 1];
-%                 23, '23 Hippocampus', [0 .157 .314];
-%                 24, '24 Auditory', [1 0 1];
-%                 25, '25 Inferior Insula', [.773 .773 .773];
-%                 26, '26 Unkown similar to Nelson2010', [1 .706 .353]};
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 %   myc 12/2018 - initial
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
@@ -105,12 +74,9 @@ else
 end
 
 u = unique(label);
-in_network = ismember(cell2mat(labelmeta(:,1)),u); % Exclude labelmetafrows that don't have a value in label vector (e.g., hippocampus in power 2011 is not in 441 nodes)
-labelmeta_excluded = labelmeta(in_network,:); % took out excluded label's row 
-
 % ~~~ Make figrue ~~~ %
 fig = figure('Color',[1 1 1]);
-set(fig, 'Position', [0 0 1200 700])
+set(fig, 'Position', [0 0 900 800])
 colormap(colormapcol) % 'jet','cool' are not bad
 imagesc(smat)
 
@@ -133,27 +99,18 @@ end
 title(titletext); % Title
 set(gca,'YTick',ticklocation);  % Y-Ticks
 set(gca,'YtickLabel',[]);
-t1 = text(zeros(length(ticklocation),1), ticklocation, labelmeta_excluded(:,1),'HorizontalAlignment','right','VerticalAlignment','middle','FontSize',12);
-for j = 1:length(labelmeta_excluded)
-    set(t1(j), 'Color', cell2mat(labelmeta_excluded(j,3)));
+t1 = text(zeros(length(ticklocation),1), ticklocation, num2str(u),'HorizontalAlignment','right','VerticalAlignment','middle','FontSize',12);
+for j = 1:length(u)
+    set(t1(j));
 end
 
 
 set(gca,'XTick',ticklocation); % X-Ticks
 set(gca,'XtickLabel',[]);
-t2 = text(ticklocation, repmat(size(mat,1),length(ticklocation),1),labelmeta_excluded(:,1),'VerticalAlignment','top','FontSize',12);
-for k = 1:length(labelmeta_excluded)
-    set(t2(k), 'Color', cell2mat(labelmeta_excluded(k,3)));
+t2 = text(ticklocation, repmat(size(mat,1),length(ticklocation),1),num2str(u),'VerticalAlignment','top','FontSize',12);
+for k = 1:length(u)
+    set(t2(k));
 end
-
-
-[legend_h, ~, ~, ~] = legend(labelmeta_excluded(:,2),'Location','BestOutside');
-set(legend_h, 'Box', 'off')
-set(legend_h, 'color', 'none')
-objh=findobj(legend, 'type','line','linestyle','-');
-set(objh,'visible','off')
-legtxt=findobj(legend,'type','text');
-legtxt = sort(legtxt); % reorder the reversed order legend txt index
 
 colorbar
 if(isempty(minr))
