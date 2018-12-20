@@ -1,13 +1,22 @@
 function [fig] = colormap_roi(mat, sorting, label, varargin)
 % DESCRIPTION:
-%   Save matrix sorted by network label. 
+%   Make figure of matrix, with option to sort by community label. 
+%   * Note that if the matrix is already sorted (organized by labeled 
+%     community, the sorting option should be set to 2 so it won't re-sort 
+%     the same matrix.
+%   * Additional options to set min/max value of the matrix dipslayed, or
+%   saving hte figure (png). If any optional argument is used, unused
+%   optional arguments should be set to empty (e.g., []). 
+%
 % USAGE
-% colormap_roi(sorted_matrix, 2, roifile);
-%   with otpions:
-% colormap_roi(sorted_matrix, 2, roifile, -.075, .075,'cool','fig title',1,'graph.png')
-%   skipping options (use []): 
-% colormap_roi(un_sorted_matrix, 1, roifile, [],[],'bone',[],[],[])
-
+% 1. simplest form: 
+%       colormap_roi(raw_matrix, 1, label);
+%       colormap_roi(sorted_matrix, 2, label);
+% 2. Use optional argument to restrict min/max values:
+%       colormap_roi(un_sorted_matrix, 1, label, -.2,2,[],[],[],[])
+% 3. Use all optional arguments: 
+%   colormap_roi(unsorted_matrix, 1, label, -.075, .075,'jet','Matrix title',1,'graph.png')
+% 
 % Inputs:   mat,            matrix to be saved as figure (e.g., 441x441 mat)
 %           sorting,        1 = sort matrix so nodes with same label are 
 %                           grouped together; 2 = no sorting
