@@ -1,6 +1,6 @@
-# system_matrix_tools
+# System Segregation (graph measure) scripts in R and Matlab
 
-Scripts useful for doing RSFC network analysis.
+Scripts useful for doing Resting-state Functiaonl Correlation (RSFC) network analysis
 
 **matlab_scripts**
 *  fsLR2roizmatrix.m - extract mean RSFC time-series from ROIs on fs_LR surfaces, outputs correlation matrix. 
