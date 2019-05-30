@@ -3,27 +3,26 @@
 #   sparse between communities, which quantifies the segregation of a 
 #   weighted network (Chan et al. 2014). 
 #  
-#  Inputs:   M,		correlation matrix 
-#            Ci,	community affiliation vector 
+#  Inputs:   M,		Correlation matrix 
+#            Ci,	Community affiliation vector (e.g., system labels)
 #  Optional: 
-#		diagzero, 	booleen for setting diagonal of input matrix to 0. 
-#					Default=TRUE
-#		negzero, 	booleen for setting negative edges of input matrix 
-#					to 0. Default=TRUE
+#		        diagzero, 	Booleen for setting diagonal of input matrix to 0. 
+#					              Default=TRUE
+#		        negzero, 	  Booleen for setting negative edges of input matrix 
+#					              to 0. Default=TRUE
 #
 #  Outputs: segresult$S,    System segregation calcualted with W & B                 
-#           segresult$W,    mean correlation between nodes within the same
-#                    		community     
-#           segresult$B,    mean correlation obetween nodes from different
-#                    		community   
+#           segresult$W,    Mean correlation between nodes within the same
+#                    		    community     
+#           segresult$B,    Mean correlation obetween nodes from different
+#                    		    community   
 # #########################################################################
 #   Reference: Chan et al. (2014) PNAS E4997
-#   2018
 #   Micaela Chan, UTD
 #
 #   Modification History:
-#   May 2018: original
-#   Oct 2018: commented script
+#   May 2018: original (MYC)
+#   Oct 2018: commented script (MYC)
 ########################################################################### 
 segregation <- function(M=NULL, Ci=NULL, diagzero=TRUE, negzero=TRUE) {
 

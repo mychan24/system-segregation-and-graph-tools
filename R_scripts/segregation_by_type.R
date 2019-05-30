@@ -5,45 +5,40 @@ segregation_by_type <- function(M=NULL, Ci=NULL, C_Type=NULL, diagzero=TRUE, neg
 #    type, from other systems of the same 'type,' and from systems of all
 #    other types; Chan et al. 2014). 
 #
-#  Inputs:   M,         correlation matrix 
-#            Ci,        community affiliation vector 
-#            C_Type     community type vector (e.g., sensory-motor, association). 
-#					    A node with type '0' is ignored when calcualting segregation between #					     other types of systems (B_other/seg_othertype)
-#
-#            diagzero 	booleen for setting diagonal of input matrix to 0. 
-#						Default=TRUE
-#            negzero  	booleen for setting negative edges of input matrix to 0. 
-#						Default=TRUE
+#  Inputs:   M,         Correlation matrix 
+#            Ci,        Community affiliation vector (e.g., system labels)
+#            C_Type,    Community type vector (e.g., sensory-motor, association). 
+#                       A node with type '0' is ignored when calcualting segregation between 
+#					              other types of systems (B_other/seg_othertype)
+#            diagzero, 	Booleen for setting diagonal of input matrix to 0. Default=TRUE
+#            negzero,  	Booleen for setting negative edges of input matrix to 0. Default=TRUE
 # 
-#  Outputs:  segresult dataframe with rows = systems, and columns as follow:  
-#            W_same,    average of the mean correlation between nodes within the same
+#  Outputs:  segresult  Dataframe with rows = systems, and columns as follow:  
+#            W_same,    Average of the mean correlation between nodes within the same
 #                       community of one system type
-#            B_all,     average of edges between nodes from different communities
+#            B_all,     Average of edges between nodes from different communities
 #                       in all system types 
-#            B_same,    average of edges between nodes from different communities
+#            B_same,    Average of edges between nodes from different communities
 #                       in the same system type
-#            B_other,   average of edges between nodes from different communities
-#                    	in the other system type
-#
-#            seg_all,  	for each system-type, the average segregation from all
-#                   	other communities that have an assigned system-type 
+#            B_other,   Average of edges between nodes from different communities
+#                    	  in the other system type
+#            seg_all,  	For each system-type, the average segregation from all
+#                   	  other communities that have an assigned system-type 
 #                       e.g., average segregation of association systems to
-#                       other association systems and sensory-motor system) 
-#            seg_same,  for each system-type, the average segregation from
-#                   	communities of the same type 
-#                       e.g., average association-to-association system
-#                       segregation.
-#            seg_other, for each system-type, the average segregation from 
-#                   	communities of all other types 
-#                       e.g., average association-to-sensory-motor system
-#                       segregation.
+#                       other association systems and sensory-motor system)
+#            seg_same,  For each system-type, the average segregation from
+#                   	  communities of the same type 
+#                       e.g., average association-to-association system segregation.
+#            seg_other, For each system-type, the average segregation from 
+#                   	  communities of all other types 
+#                       e.g., average association-to-sensory-motor system segregation.
 # ##########################################################################
 #   Reference: Chan et al. (2014) PNAS E4997
 #   2017-2018
 #   Micaela Chan, UTD
 #
 #   Modification History:
-#   Spe 2017: original (MYC)
+#   Sep 2017: original (MYC)
 #   Oct 2018: Commented script (MYC)
 # #########################################################################
 
