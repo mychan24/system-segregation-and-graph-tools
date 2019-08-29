@@ -25,9 +25,10 @@ function [z, r, tp] = fsLR2roizmat(gL, gR, roiL, roiR)
 %                   of the vertices within each ROI at that frame).
 %
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
-%   myc 10/2016 - original
-%   myc 10/2018 - commented script
+%   myc 08/2019 - Detect if roi input is single/multiple columns.
 %   myc 11/2018 - change roi flag from ==1 to ~=0
+%   myc 10/2018 - commented script
+%   myc 10/2016 - Initial
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 % % Load data GIFTIs
 if ischar(gL) % check if is a file name or gifti object
@@ -55,14 +56,36 @@ end
 roiL = roiL.cdata;
 roiR = roiR.cdata;
 
-glm = zeros(size(roiL,2),size(gL,2)); %Left
-for j = 1:size(roiL,2) % loop ROIs
-    glm(j,:) = mean(gL(roiL(:,j)~=0, :));
-end
+if(size(roiL,2)>1)
+    % If ROIs are defined by separate columns
+    
+    glm = zeros(size(roiL,2),size(gL,2)); %Left
+    grm = zeros(size(roiR,2),size(gR,2)); %Right       
+    for j = 1:size(roiL,2) % loop ROIs
+        glm(j,:) = mean(gL(roiL(:,j)~=0, :));
+    end
 
-grm = zeros(size(roiR,2),size(gR,2)); %Right   
-for k = 1:size(roiR,2)
-    grm(k,:) = mean(gR(roiR(:,k)~=0, :));
+    for k = 1:size(roiR,2)
+        grm(k,:) = mean(gR(roiR(:,k)~=0, :));
+    end
+else
+    % If ROIs are defined by 1 column of different number index 
+    uroiL = unique(roiL);    
+    uroiL=uroiL(uroiL~=0);
+    
+    uroiR = unique(roiR);
+    uroiR=uroiR(uroiR~=0);
+    
+    glm = zeros(length(uroiL),size(gL,2)); %Left
+    grm = zeros(length(uroiR),size(gR,2)); %Right     
+    
+    for j = 1:length(uroiL) % loop ROIs
+        glm(j,:) = mean(gL(roiL(:,1)==uroiL(j), :));
+    end
+    
+    for k = 1:length(uroiR) % loop ROIs
+        grm(k,:) = mean(gR(roiR(:,1)==uroiR(k), :));
+    end
 end
 
 tp = [glm;grm]; % Combine left and right
