@@ -130,9 +130,9 @@ function [ S_all, S_same, S_other, W_same, B_all, B_same, B_other] = segregation
      B_same(x) = mean(b.same, 2);
      B_other(x) = mean(b.other, 2);
      
-     S_all(x) = (W_same(x) - B_all(x)) ./ W_same(x);        % subject x system-type average seg to all other communities
-     S_same(x) = (W_same(x) - B_same(x)) ./ W_same(x);      % subject x system-type average seg to communities of the same type
-     S_other(x) = (W_same(x) - B_other(x)) ./ W_same(x);    % subject x system-type average seg to communities of other type(s)
+     S_all(x) = W_same(x) - mean(b.all, 2))./mean(w, 2); % subject x system-type average seg to all other communities
+     S_same(x) = W_same(x) - mean(b.same, 2))./mean(w, 2); % subject x system-type average seg to communities of the same type
+     S_other(x) = (mean(w, 2) - mean(b.other, 2))./mean(w, 2); % subject x system-type average seg to communities of other type(s)
 
  end
 
