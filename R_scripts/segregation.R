@@ -26,7 +26,7 @@
 ########################################################################### 
 segregation <- function(M=NULL, Ci=NULL, diagzero=TRUE, negzero=TRUE) {
 
-  if(!isSymmetric.matrix(M)) stop('Input matrix must be symmetric.')
+  if(!isSymmetric.matrix(M, check.attributes = FALSE)) stop('Input matrix must be symmetric.')
   if(dim(M)[1]!=length(Ci)) stop('Length of community vector does not match matrix dimension.')
   
   # Set diagonal to 0
