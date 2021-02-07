@@ -11,11 +11,11 @@
 #		        negzero, 	  Booleen for setting negative edges of input matrix 
 #					              to 0. Default=TRUE
 #
-#  Outputs: segresult$S,    System segregation calcualted with W & B                 
-#           segresult$W,    Mean correlation between nodes within the same
-#                    		    community     
-#           segresult$B,    Mean correlation obetween nodes from different
-#                    		    community   
+#  Outputs: 
+#     A list object is returned and contain the following elements - 
+#           S,    System segregation calcualted with W & B                 
+#           W,    Mean correlation between nodes within the same community     
+#           B,    Mean correlation obetween nodes from different community   
 # #########################################################################
 #   Reference: Chan et al. (2014) PNAS E4997
 #   Micaela Chan, UTD
