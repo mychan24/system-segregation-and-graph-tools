@@ -6,6 +6,5 @@ Authors@R: person("Micale", "Chan", email = "mchan@utdallas.edu",
     role = c("aut", "cre"))
 Description: Testing around
 LazyData: TRUE
-# packages to install
-Imports:
+# packages to install # Imports:
 RoxygenNote: 6.0.1
