@@ -5,6 +5,8 @@ source("./R_scripts/segregation.R")
 source("./R_scripts/segregation_by_type.R")
 load('./test/testanswer.RData')
 
+pass <- list()
+
 #### 1. Test segregation() ####
 m <- matrix(NA,4,4)   # Create test data
 m[1,] <- c(1,4,2,2)
@@ -17,9 +19,11 @@ ci <- c(1,1,2,2)      # Test community assignment
 out <- segregation(M = m, Ci = ci,diagzero = T, negzero = T)
 
 if(!identical(out, seg_c)){
-  print("[2] ERROR! segregation() returned incorrect result. Check source code")
+  message("[2] ERROR! segregation() returned incorrect result. Check source code")
+  pass[[1]] <- FALSE
 }else{
-  print("[1] PASSED: segregation() returned the correct test results.")
+  message("[1] PASSED: segregation() returned the correct test results.")
+  pass[[1]] <- TRUE
 }
 
 #### 2. Test segregation_by_type() ####
@@ -40,21 +44,14 @@ m[8,] <- c(1,2,2,2,0,1,0,1)
 out_type <- segregation_by_type(M = m, Ci = ci, C_Type = c_type, diagzero = T, negzero = T)
 
 if(!identical(out_type, seg_type_c)){
-  print("[2] ERROR! segregation_type() returned incorrect result. Check source code")
+  message("[2] ERROR! segregation_type() returned incorrect result. Check source code")
+  pass[[2]] <- FALSE
 }else{
-  print("[2] PASSED: segregation_type() returned the correct test results.")
+  message("[2] PASSED: segregation_type() returned the correct test results.")
+  pass[[2]] <- TRUE
 }
 
-
-
-
-
-
-
-
-
-
-
+pass
 
 
 
