@@ -93,5 +93,6 @@ segregation_by_type <- function(M=NULL, Ci=NULL, C_Type=NULL, diagzero=TRUE, neg
   segresult$seg_same <- (segresult$W_same-segresult$B_same)/segresult$W_same
   segresult$seg_other <- (segresult$W_same-segresult$B_other)/segresult$W_same
   
+  row.names(segresult) <- UniqueType
   return(segresult)
 }
