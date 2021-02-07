@@ -1,0 +1,10 @@
+Package: testing_ci_r
+Type: Package
+Title: Testing segregation R script
+Version: 1.0
+Authors@R: person("Micale", "Chan", email = "mchan@utdallas.edu",
+    role = c("aut", "cre"))
+Description: Testing around
+LazyData: TRUE
+# packages to install # Imports:
+RoxygenNote: 6.0.1
