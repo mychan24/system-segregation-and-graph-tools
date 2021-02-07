@@ -1,3 +1,4 @@
+[![Build Status](https://www.travis-ci.com/mychan24/system_matrix_tools.svg?branch=master)](https://www.travis-ci.com/mychan24/system_matrix_tools)
 # System Segregation (graph measure) scripts in R and Matlab
 
 Scripts useful for doing Resting-state Functiaonl Correlation (RSFC) network analysis
