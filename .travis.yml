@@ -1,0 +1,12 @@
+language: r
+cache: packages
+warnings_are_errors: false
+
+r:
+  - release
+
+os:
+  - linux
+
+script:
+    - Rscript ./test/testR.R
