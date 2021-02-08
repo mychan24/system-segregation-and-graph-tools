@@ -51,7 +51,12 @@ if(!identical(out_type, seg_type_c)){
   pass[[2]] <- TRUE
 }
 
-pass
+if(sum(unlist(pass))!=length(pass)){
+  stop(sprintf("One-or more-of the function is incorrect. [%s]", format(Sys.time(),"%Y-%m-%d, %H:%m")))
+}else{
+  message(sprintf("Testing completed without errors. [%s]", format(Sys.time(),"%Y-%m-%d, %H:%m")))
+}
+  
 
 
 
