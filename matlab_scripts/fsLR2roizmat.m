@@ -13,10 +13,11 @@ function [z, r, tp] = fsLR2roizmat(gL, gR, roiL, roiR)
 %
 % Inputs:   gL,         gifti of subject's L fs_LR (32k x timepoint)
 %           gR,         gifti of subject's R fs_LR (32k x timepoint)
-%           roiL,       gifti file of ROIs on L hemisphere.
-%           roiR,       gifti file of ROIs on R hemisphere, 
-%                       with each ROI on separate column in the gifti file.
-%          
+%           roiL,       gifti file of ROIs on L hemisphere. Each ROI is 
+%			either on separate column in the gifti file 
+%			or in all ROIs are on a single column, with each 
+%			number representing a different ROI.
+%           roiR,      	gifti file of ROIs on R hemisphere
 %           
 % Outputs:  z,      Fisher-z-transformed correlation matrix.
 %           r,      Corrleation r-matrix (Pearson's r). Need to normalized 
@@ -39,7 +40,7 @@ if ischar(gL) % check if is a file name or gifti object
     gR = gR.cdata;
 elseif isa(gL, 'gifti')
     disp('Input is a gifti object')
-    gL = gL.cdata; 
+    gL = gL.cdata;
     gR = gR.cdata;
 elseif isa(gL,'float')
     disp('Input is a numerical matrix')
