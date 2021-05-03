@@ -1,4 +1,4 @@
-segregation_by_type_pcontr <- function(M=NULL, Ci=NULL, C_Type=NULL, diagzero=TRUE, negzero=TRUE) {
+segregation_by_type_prcont <- function(M=NULL, Ci=NULL, C_Type=NULL, diagzero=TRUE, negzero=TRUE) {
 # DESCRIPTION:
 #    Calculate versions of system segregation based on system-type (e.g., 
 #    average segregation of systems of a certain 'type' to systems of any
