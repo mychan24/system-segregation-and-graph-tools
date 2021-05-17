@@ -3,16 +3,16 @@ segregation_by_type_prcont <- function(M=NULL, Ci=NULL, C_Type=NULL, diagzero=TR
 #    Calculate versions of system segregation based on system-type (e.g., 
 #    average segregation of systems of a certain 'type' to systems of any
 #    type, from other systems of the same 'type,' and from systems of all
-#    other types. In this verison, the contribution of each 'system' is 
+#    other types. In this venison, the contribution of each 'system' is 
 #    proportional to its size. 
 #
 #  Inputs:   M,         Correlation matrix 
 #            Ci,        Community affiliation vector (e.g., system labels)
 #            C_Type,    Community type vector (e.g., sensory-motor, association). 
-#                       A node with type '0' is ignored when calcualting segregation between 
+#                       A node with type '0' is ignored when calculating segregation between 
 #					              other types of systems (B_other/seg_othertype)
-#            diagzero, 	Booleen for setting diagonal of input matrix to 0. Default=TRUE
-#            negzero,  	Booleen for setting negative edges of input matrix to 0. Default=TRUE
+#            diagzero, 	Boolean for setting diagonal of input matrix to 0. Default=TRUE
+#            negzero,  	Boolean for setting negative edges of input matrix to 0. Default=TRUE
 # 
 #  Outputs:  segresult  Dataframe with rows = systems, and columns as follow:  
 #            W_same,    Average of the mean correlation between nodes within the same
@@ -34,11 +34,11 @@ segregation_by_type_prcont <- function(M=NULL, Ci=NULL, C_Type=NULL, diagzero=TR
 #                   	  communities of all other types 
 #                       e.g., average association-to-sensory-motor system segregation.
 # ##########################################################################
-#   Reference: Chan et al. (2014) PNAS E4997
-#   2017-2018
+#   Reference: Chan et al. (2014) PNAS E4997; Chan et al. (submitted; 2021)
 #   Micaela Chan, UTD
 #
 #   Modification History:
+#   May 2021: Modified calculation from 2014 version system-type segregation
 #   Sep 2017: original (MYC)
 #   Oct 2018: Commented script (MYC)
 # #########################################################################
