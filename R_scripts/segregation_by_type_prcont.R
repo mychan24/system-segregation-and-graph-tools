@@ -1,17 +1,18 @@
-segregation_by_type <- function(M=NULL, Ci=NULL, C_Type=NULL, diagzero=TRUE, negzero=TRUE) {
+segregation_by_type_prcont <- function(M=NULL, Ci=NULL, C_Type=NULL, diagzero=TRUE, negzero=TRUE) {
 # DESCRIPTION:
 #    Calculate versions of system segregation based on system-type (e.g., 
 #    average segregation of systems of a certain 'type' to systems of any
 #    type, from other systems of the same 'type,' and from systems of all
-#    other types; Chan et al. 2014). 
+#    other types. In this venison, the contribution of each 'system' is 
+#    proportional to its size. 
 #
 #  Inputs:   M,         Correlation matrix 
 #            Ci,        Community affiliation vector (e.g., system labels)
 #            C_Type,    Community type vector (e.g., sensory-motor, association). 
-#                       A node with type '0' is ignored when calcualting segregation between 
+#                       A node with type '0' is ignored when calculating segregation between 
 #					              other types of systems (B_other/seg_othertype)
-#            diagzero, 	Booleen for setting diagonal of input matrix to 0. Default=TRUE
-#            negzero,  	Booleen for setting negative edges of input matrix to 0. Default=TRUE
+#            diagzero, 	Boolean for setting diagonal of input matrix to 0. Default=TRUE
+#            negzero,  	Boolean for setting negative edges of input matrix to 0. Default=TRUE
 # 
 #  Outputs:  segresult  Dataframe with rows = systems, and columns as follow:  
 #            W_same,    Average of the mean correlation between nodes within the same
@@ -33,11 +34,11 @@ segregation_by_type <- function(M=NULL, Ci=NULL, C_Type=NULL, diagzero=TRUE, neg
 #                   	  communities of all other types 
 #                       e.g., average association-to-sensory-motor system segregation.
 # ##########################################################################
-#   Reference: Chan et al. (2014) PNAS E4997
-#   2017-2018
+#   Reference: Chan et al. (2014) PNAS E4997; Chan et al. (submitted; 2021)
 #   Micaela Chan, UTD
 #
 #   Modification History:
+#   May 2021: Modified calculation from 2014 version system-type segregation
 #   Sep 2017: original (MYC)
 #   Oct 2018: Commented script (MYC)
 # #########################################################################
@@ -67,28 +68,32 @@ segregation_by_type <- function(M=NULL, Ci=NULL, C_Type=NULL, diagzero=TRUE, neg
   
     type_i <- which(C_Type==UniqueType[i])
     Ci_specific <- unique(Ci[C_Type==UniqueType[i]])
-    Ci_result <- data.frame(W_same=matrix(NA,length(Ci_specific)), # initializing system-specific data frame
-                            B_all=matrix(NA,length(Ci_specific)),  
-                            B_same=matrix(NA,length(Ci_specific)),
-                            B_other=matrix(NA,length(Ci_specific)))
     
-    othertype_i <- which(C_Type!=UniqueType[i] & C_Type!=0) # find index of communities not in current system-type (ignoring nodes not in either system types [i.e., '0']).
+    W_same <- vector(mode = "numeric")
+    B_all <- vector(mode = "numeric")
+    B_same <- vector(mode = "numeric")
+    B_other <- vector(mode = "numeric")
     
-    for(j in 1:length(Ci_specific)){ # Loop through each community within current system-type
+    # find index of communities not in current system-type (ignoring nodes not in either system types [i.e., '0']).
+    othertype_i <- which(C_Type!=UniqueType[i] & C_Type!=0) 
+    
+    for(j in 1:length(Ci_specific)){  # Loop through each community within current system-type
         w.index <- as.vector(which(Ci==Ci_specific[j])) # find index of a single community within current system-type
         b.index <- intersect(type_i, as.vector(which(Ci!=Ci_specific[j]))) # find index of other communities within current system-type
 		
         w.mat <- M[w.index, w.index]
-        Ci_result$W_same[j] <- mean(w.mat[upper.tri(M[w.index, w.index],diag=FALSE)],na.rm=TRUE) # average within-community 
-        Ci_result$B_all[j] <- mean(M[w.index, c(b.index, othertype_i)], na.rm=TRUE) # average between-community with other communities (same or diff type)        
-        Ci_result$B_same[j] <- mean(M[w.index, b.index],na.rm=TRUE)  # average between-community with same-type of communities 		
-        Ci_result$B_other[j] <- mean(M[w.index, othertype_i],na.rm=TRUE) # average between-community with other-type of communities        
+        
+        W_same <- append(W_same, w.mat[upper.tri(M[w.index, w.index],diag=FALSE)]) # extract within-community edges
+        B_all <- append (B_all, M[w.index, c(b.index, othertype_i)])     # extract between-comm edges with any other communities (same or diff type)
+        B_same <- append(B_same, M[w.index, b.index])                    # extract between-comm edges with same-type of communities 		
+        B_other <- append(B_other, M[w.index, othertype_i])              # extract between-comm edges with other-type(s) of communities        
     }
+    segresult[i,] <- c(mean(W_same, na.rm=T), mean(B_all,na.rm=T), mean(B_same,na.rm=T), mean(B_other,na.rm=T))
     
-    segresult[i,] <- colMeans(Ci_result, na.rm=TRUE)
+    # segresult[i,] <- colMeans(Ci_result, na.rm=TRUE)
   }
   
-  # Calculating segregations (all, same-type, other-type)
+  # Calculating segregation (all, same-type, other-type)
   segresult$seg_all <- (segresult$W_same-segresult$B_all)/segresult$W_same
   segresult$seg_same <- (segresult$W_same-segresult$B_same)/segresult$W_same
   segresult$seg_other <- (segresult$W_same-segresult$B_other)/segresult$W_same
