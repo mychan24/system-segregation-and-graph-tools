@@ -22,7 +22,9 @@ segregation_by_type_prcont <- function(M=NULL, Ci=NULL, C_Type=NULL, diagzero=TR
 #            B_same,    Average of edges between nodes from different communities
 #                       in the same system type
 #            B_other,   Average of edges between nodes from different communities
-#                    	  in the other system type
+#                    	  in the other system type. 
+#                       Note that if there are only two categories of system type, 
+#                       the B_other will be the same for both system type.
 #            seg_all,  	For each system-type, the average segregation from all
 #                   	  other communities that have an assigned system-type 
 #                       e.g., average segregation of association systems to
