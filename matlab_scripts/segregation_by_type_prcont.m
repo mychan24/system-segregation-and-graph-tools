@@ -1,4 +1,4 @@
-function [ S_all, S_same, S_other, W_same, B_all, B_same, B_other] = segregation_by_type_prcont( M, Ci, Ti )
+function [ S_all, S_same, S_other, W_same, B_all, B_same, B_other] = segregation_by_type_prcont(M, Ci, Ti, varargin)
 % %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 % segregation_by_type_prcont.m
 % %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
@@ -29,6 +29,12 @@ function [ S_all, S_same, S_other, W_same, B_all, B_same, B_other] = segregation
 %                 ignored when calculating segregation from communities of
 %                 other types (S_other).
 %                   e.g., '1' for Sensory-motor, '2' for Association
+%
+%     (OPTIONAL)
+%         diagzero  : Convert diagonal to zero (e.g., if matrix has InF in 
+%                     diagonal). Enter 'diagzero'.
+%
+%         negzero   : Convert negative values to zero. Enter 'negzero'
 %
 % Outputs: S_all:   for each system-type, the average segregation from all
 %                   other communities that have an assigned system-type
@@ -82,6 +88,20 @@ function [ S_all, S_same, S_other, W_same, B_all, B_same, B_other] = segregation
  elseif sum(sum(sum(isnan(M)))) > 0
      disp('Warning: NaN values detected in input data matrix, may result in some NaN segregation values.');
  end
+ 
+ if numvarargs > 2
+    error('segregation_by_type_prcont:TooManyInputs', ...
+        'requires at most two optional inputs');
+ end
+ 
+ % Set diagonal/negatives to zero if specified
+ if(sum(ismember(varargin, 'diagzero'))>0)
+    M(1:1+size(M,1):end) = 0;
+ end
+ 
+ if(sum(ismember(varargin, 'negzero'))>0)
+    M(M<0) = 0;
+ end 
 
  % Index of node affiliations (community & system-type)
  nCi = unique(Ci);
