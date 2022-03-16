@@ -37,7 +37,7 @@ if length(Ci)~=length(M)
         error('Length of label does not match with matrix dimension.');
 end
 
-if numvarargs > 2
+if length(varargin) > 2
     error('segregation_by_type_prcont:TooManyInputs', ...
         'requires at most two optional inputs');
 end

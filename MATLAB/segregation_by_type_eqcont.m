@@ -79,8 +79,8 @@ function [S_all, S_same, S_other, W_same, B_all, B_same, B_other] = segregation_
  elseif sum(sum(sum(isnan(M)))) > 0
      disp('Warning: NaN values detected in input data matrix, may result in some NaN segregation values.');
  end
-  
- if numvarargs > 2
+
+ if length(varargin) > 2
     error('segregation_by_type_prcont:TooManyInputs', ...
         'requires at most two optional inputs');
  end
