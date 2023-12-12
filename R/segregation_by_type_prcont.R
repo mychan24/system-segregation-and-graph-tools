@@ -46,7 +46,7 @@ segregation_by_type_prcont <- function(M=NULL, Ci=NULL, C_Type=NULL, diagzero=TR
 # #########################################################################
 
   # warnings
-  if(!isSymmetric.matrix(M)) stop('Input matrix must be symmetric.')
+  if(!isSymmetric.matrix(M,check.attributes = FALSE)) stop('Input matrix must be symmetric.')
   if(dim(M)[1]!=length(Ci)) stop('Length of community vector does not match matrix dimension.')
   if(dim(M)[1]!=length(C_Type)) stop('Length of community type vector does not match matrix dimension.')
   
