@@ -67,12 +67,13 @@ else
 
     % Left Hemisphere
     uroiL = unique(roiL);    
-    uroiL=uroiL(uroiL~=0);
+    uroiL = uroiL(uroiL~=0);
     clm = zeros(length(uroiL),size(cL,2)); %Left
 
     for j = 1:length(uroiL) % loop ROIs
-        vert_in_node_L=find(roiL==uroiL(j))-1; % minus 1 since vertex count starts from 0        
-        clm(j,:) = mean(cL(ismember(cii.diminfo{1}.models{i_left}.vertlist,vert_in_node_L), :));
+        vert_in_node_L = find(roiL==uroiL(j))-1; % minus 1 since vertex count starts from 0
+        cifti_vertex_index = ismember(cii.diminfo{1}.models{i_left}.vertlist, vert_in_node_L);
+        clm(j,:) = mean(cL(cifti_vertex_index, :));
     end
     
     % Right Hemisphere    
