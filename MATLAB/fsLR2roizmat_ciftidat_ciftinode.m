@@ -18,7 +18,7 @@ function [z, r, tp] = fsLR2roizmat_ciftidat_ciftinode(cii, roi_cii)
 if ischar(roi_cii) % check if roi is a file name or gifti object
     roi_cii = cifti_read(roi_cii); 
 end
-roi = roi_cii.data;
+roi = roi_cii.cdata;
 
 structnames={};
 for i = 1:length(cii.diminfo{1}.models)
@@ -42,6 +42,9 @@ cR = cii.cdata(cstart_R:cend_R,:);
 
 
 % Left Hemisphere
+roiL = roi(roi_cii.diminfo{1}.models{1}.vertlist+1);
+uroiL = unique(roiL);
+uroiL = uroiL(uroiL~=0);   
 clm = zeros(length(uroiL),size(cL,2)); %Left
 
 for j = 1:length(uroiL) % loop ROIs
@@ -49,7 +52,8 @@ for j = 1:length(uroiL) % loop ROIs
     clm(j,:) = mean(cL(ismember(cii.diminfo{1}.models{i_left}.vertlist,vert_in_node_L), :));
 end
 
-% Right Hemisphere    
+% Right Hemisphere
+roiR = roi(roi_cii.diminfo{1}.models{2}.vertlist+1);
 uroiR = unique(roiR);
 uroiR=uroiR(uroiR~=0);    
 crm = zeros(length(uroiR),size(cR,2)); %Right    
