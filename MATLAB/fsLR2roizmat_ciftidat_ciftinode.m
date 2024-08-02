@@ -1,72 +1,71 @@
 function [z, r, tp] = fsLR2roizmat_ciftidat_ciftinode(cii, roi_cii)
 % DESCRIPTION:
-%   Extract node time series from 32k by 32k fsLR saved in CIFTI dtseries. 
+%   Extract node time series from 32k fsLR saved in CIFTI dtseries. 
 %   Outputs correlation matrix (r), fishers-z-transfromed corr matrix (z),
 %   and node-by-timepoint matrix (tp). 
 %   
-%   Nodes are L & R GIFTI files.
+%   cii:        Full path to CIFIT data or CIFTI object
 %
-%   If running in MATLAB 2018+ addpath GIFTIv1_8
-
-% --- Addpaths should be moved outside of this script ----
-% addpath /cvl/wig/data/resources/tools/software/cifti-matlab
-% addpath /cvl/wig/data/resources/tools/general_analysis/gifti_v1_8
+%   roi_cii:    Full path to nodes in CIFTI format or CIFTI object in
+%   
+%   requires: cifti-matlab
 % ----------% 
 
 
-% % Load ROIs
+% --- Load and setup ROIs ---
 if ischar(roi_cii) % check if roi is a file name or gifti object
     roi_cii = cifti_read(roi_cii); 
 end
-roi = roi_cii.cdata;
 
-structnames={};
-for i = 1:length(cii.diminfo{1}.models)
-    structnames = [structnames {cii.diminfo{1}.models{i}.struct}];
+roi_start_L=    roi_cii.diminfo{1}.models{1}.start;
+roi_end_L =     roi_cii.diminfo{1}.models{1}.count + roi_start_L - 1;
+roiL =          roi_cii.cdata(roi_start_L:roi_end_L);
+uroiL = unique(roiL);
+uroiL = uroiL(uroiL~=0);   
+
+roi_start_R=    roi_cii.diminfo{1}.models{2}.start;
+roi_end_R =     roi_cii.diminfo{1}.models{2}.count + roi_start_R - 1;
+roiR =          roi_cii.cdata(roi_start_R:roi_end_R);
+uroiR = unique(roiR);
+uroiR=uroiR(uroiR~=0);    
+
+% --- Load and setup data ---
+if ischar(cii) % check if roi is a file name or gifti object
+    cii = cifti_read(cii); 
 end
 
-i_left = strcmp(structnames, 'CORTEX_LEFT');
-i_right = strcmp(structnames, 'CORTEX_RIGHT');
-
 % LEFT
-cstart_L = cii.diminfo{1}.models{i_left}.start;
-cend_L = cii.diminfo{1}.models{i_left}.count + cstart_L - 1;
-cL = cii.cdata(cstart_L:cend_L,:);
+cstart_L =  cii.diminfo{1}.models{1}.start;
+cend_L =    cii.diminfo{1}.models{1}.count + cstart_L - 1;
+cL =        cii.cdata(cstart_L:cend_L,:);
 
 % RIGHT
-cstart_R = cii.diminfo{1}.models{i_right}.start;
-cend_R = cii.diminfo{1}.models{i_right}.count + cstart_R - 1;
-cR = cii.cdata(cstart_R:cend_R,:);
-
-% --- ---------------- ----
+cstart_R =  cii.diminfo{1}.models{2}.start;
+cend_R =    cii.diminfo{1}.models{2}.count + cstart_R - 1;
+cR =        cii.cdata(cstart_R:cend_R,:);
 
 
 % Left Hemisphere
-roiL = roi(roi_cii.diminfo{1}.models{1}.vertlist+1);
-uroiL = unique(roiL);
-uroiL = uroiL(uroiL~=0);   
-clm = zeros(length(uroiL),size(cL,2)); %Left
+clm = zeros(length(uroiL),size(cL,2)); 
 
 for j = 1:length(uroiL) % loop ROIs
-    vert_in_node_L=find(roiL==uroiL(j))-1; % minus 1 since vertex count starts from 0        
-    clm(j,:) = mean(cL(ismember(cii.diminfo{1}.models{i_left}.vertlist,vert_in_node_L), :));
+    roi_index_from_vertlist_L=roi_cii.diminfo{1}.models{1}.vertlist(find(roiL==uroiL(j)));
+    i_vert_in_roi_L = ismember(cii.diminfo{1}.models{1}.vertlist, roi_index_from_vertlist_L);  % find vertices in cdata based on model vertlist matching node's vertlist
+    clm(j,:) = mean(cL(i_vert_in_roi_L, :));
 end
 
 % Right Hemisphere
-roiR = roi(roi_cii.diminfo{1}.models{2}.vertlist+1);
-uroiR = unique(roiR);
-uroiR=uroiR(uroiR~=0);    
-crm = zeros(length(uroiR),size(cR,2)); %Right    
+crm = zeros(length(uroiR),size(cR,2));
 
 for k = 1:length(uroiR) % loop ROIs
-    vert_in_node_R=find(roiR==uroiR(k))-1; % minus 1 since vertex count starts from 0        
-    crm(k,:) = mean(cR(ismember(cii.diminfo{1}.models{i_right}.vertlist,vert_in_node_R), :));
+    roi_index_from_vertlist_R=roi_cii.diminfo{1}.models{1}.vertlist(find(roiR==uroiR(k)));
+    i_vert_in_roi_R = ismember(cii.diminfo{1}.models{2}.vertlist, roi_index_from_vertlist_R);  % find vertices in cdata based on model vertlist matching node's vertlist
+    crm(k,:) = mean(cR(i_vert_in_roi_R, :));
 end
 
 tp = [clm;crm]; % Combine left and right
 r = corrcoef(tp'); % Correlation matrix
 z = 0.5 * log((1+r)./(1-r)); % Fisher-z transform
-
 
 end % function
 
